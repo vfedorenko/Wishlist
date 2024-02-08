@@ -1,12 +1,10 @@
 package by.vfedorenko.wishlist.android.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.rememberNavController
@@ -14,7 +12,6 @@ import by.vfedorenko.wishlist.android.presentation.compose.theme.AppTheme
 import by.vfedorenko.wishlist.android.presentation.navigation.AppNavHost
 import by.vfedorenko.wishlist.android.presentation.navigation.buildDestination
 import by.vfedorenko.wishlist.presentation.navigation.Back
-import by.vfedorenko.wishlist.presentation.navigation.BackTo
 import by.vfedorenko.wishlist.presentation.navigation.CleanForward
 import by.vfedorenko.wishlist.presentation.navigation.Forward
 import by.vfedorenko.wishlist.presentation.navigation.NavigationManager
@@ -59,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     LaunchedEffect(Unit) {
                         navigationManager.commands
                             .onEach { command ->
-                                if (navController.currentDestination?.route != command.direction.buildDestination()) {
+                                if (navController.currentDestination?.route != command.route.buildDestination()) {
                                     try {
                                         when (command) {
                                             Back -> if (navController.previousBackStackEntry != null) {
@@ -68,24 +65,19 @@ class MainActivity : ComponentActivity() {
                                                 finish()
                                             }
 
-                                            is BackTo -> navController.popBackStack(
-                                                route = command.direction.buildDestination(),
-                                                inclusive = false
-                                            )
-
                                             is CleanForward -> {
                                                 navController.clearBackStack()
-                                                navController.navigate(command.direction.buildDestination()) {
+                                                navController.navigate(command.route.buildDestination()) {
                                                     navController.clearSelf(this)
                                                     launchSingleTop = command.singleTop
                                                 }
                                             }
 
-                                            is Forward -> navController.navigate(command.direction.buildDestination()) {
+                                            is Forward -> navController.navigate(command.route.buildDestination()) {
                                                 launchSingleTop = command.singleTop
                                             }
 
-                                            is Replace -> navController.navigate(command.direction.buildDestination()) {
+                                            is Replace -> navController.navigate(command.route.buildDestination()) {
                                                 navController.clearSelf(this)
                                                 launchSingleTop = command.singleTop
                                             }

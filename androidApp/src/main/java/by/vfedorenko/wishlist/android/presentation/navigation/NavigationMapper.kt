@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import by.vfedorenko.wishlist.presentation.navigation.BooleanArg
 import by.vfedorenko.wishlist.presentation.navigation.IntArg
-import by.vfedorenko.wishlist.presentation.navigation.NavigationDirection
+import by.vfedorenko.wishlist.presentation.navigation.NavigationRoute
 import by.vfedorenko.wishlist.presentation.navigation.Screen
 import by.vfedorenko.wishlist.presentation.navigation.StringArg
 
@@ -24,7 +24,7 @@ fun NavGraphBuilder.buildDestination(screen: Screen, body: @Composable (NavBackS
     }
 }
 
-fun NavigationDirection.buildDestination(): String =
+fun NavigationRoute.buildDestination(): String =
     if (arguments.isEmpty()) {
         screen.route
     } else {

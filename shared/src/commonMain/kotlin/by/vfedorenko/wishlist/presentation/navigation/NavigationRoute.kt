@@ -20,14 +20,14 @@ enum class Screen(
     )
 }
 
-sealed class NavigationDirection(val screen: Screen) {
+sealed class NavigationRoute(val screen: Screen) {
     open val arguments: Map<NavArgument, Any> = emptyMap()
 
-    data object Stub : NavigationDirection(Screen.Stub)
-    data object Login : NavigationDirection(Screen.Login)
-    data object WishList : NavigationDirection(Screen.WishList)
+    data object Stub : NavigationRoute(Screen.Stub)
+    data object Login : NavigationRoute(Screen.Login)
+    data object WishList : NavigationRoute(Screen.WishList)
 
-    data class WishEditor(val id: String = NO_ID) : NavigationDirection(Screen.WishEditor) {
+    data class WishEditor(val id: String = NO_ID) : NavigationRoute(Screen.WishEditor) {
         override val arguments = mapOf(
             Screen.WishEditor.argumentKeys[0] to id
         )

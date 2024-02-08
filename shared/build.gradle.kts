@@ -1,6 +1,11 @@
+import co.touchlab.skie.configuration.EnumInterop
+import co.touchlab.skie.configuration.FlowInterop
+import co.touchlab.skie.configuration.SealedInterop
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
@@ -38,5 +43,15 @@ android {
     compileSdk = 34
     defaultConfig {
         minSdk = 26
+    }
+}
+
+skie {
+    features {
+        group {
+            EnumInterop.Enabled(true)
+            SealedInterop.Enabled(true)
+            FlowInterop.Enabled(true)
+        }
     }
 }

@@ -1,9 +1,8 @@
 package by.vfedorenko.wishlist.presentation.navigation
 
-sealed class NavigationCommand(val direction: NavigationDirection = NavigationDirection.Stub)
+sealed class NavigationCommand(val route: NavigationRoute = NavigationRoute.Stub)
 
 data object Back : NavigationCommand()
-class Forward(directions: NavigationDirection, val singleTop: Boolean = false) : NavigationCommand(directions)
-class CleanForward(directions: NavigationDirection, val singleTop: Boolean = false) : NavigationCommand(directions)
-class Replace(directions: NavigationDirection, val singleTop: Boolean = false) : NavigationCommand(directions)
-class BackTo(directions: NavigationDirection) : NavigationCommand(directions)
+class Forward(directions: NavigationRoute, val singleTop: Boolean = false) : NavigationCommand(directions)
+class CleanForward(directions: NavigationRoute, val singleTop: Boolean = false) : NavigationCommand(directions)
+class Replace(directions: NavigationRoute, val singleTop: Boolean = false) : NavigationCommand(directions)

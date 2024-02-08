@@ -3,9 +3,13 @@ package by.vfedorenko.wishlist.presentation
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -67,8 +71,8 @@ interface Middleware<State : MviState> {
     }
 }
 
-class MviStore<State : MviState>(
-    private val initialState: State,
+open class MviStore<State : MviState>(
+    val initialState: State, // It is public for the iOS compatibility
     private val reducer: Reducer<State>,
     private val middleware: Middleware<State>,
     private val commonMiddlewares: Set<Middleware<MviState>>
@@ -78,15 +82,14 @@ class MviStore<State : MviState>(
     private val intents = MutableSharedFlow<MviIntent>(extraBufferCapacity = 100)
 
     fun init(coroutineScope: CoroutineScope) {
-        coroutineScope.launch {
-            intents
-                .onSubscription { intents.emit(GenericIntent.Init) }
-                .onCompletion {
-                    executeIntent(GenericIntent.OnCleared, coroutineScope)
-                    state.value = initialState
-                }
-                .collect { executeIntent(it, coroutineScope) }
-        }
+        intents
+            .onSubscription { intents.emit(GenericIntent.Init) }
+            .onCompletion {
+                executeIntent(GenericIntent.OnCleared, coroutineScope)
+                state.value = initialState
+            }
+            .onEach { executeIntent(it, coroutineScope) }
+            .launchIn(coroutineScope)
     }
 
     fun acceptIntent(intent: MviIntent) {
@@ -114,3 +117,5 @@ inline fun <reified T> MviIntent.tryCast(block: T.() -> Unit) {
 
 private fun generateActionLogs(intent: MviIntent, state: MviState) =
     "ACTION: $intent"
+
+val iosCoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

@@ -5,8 +5,8 @@ import by.vfedorenko.wishlist.presentation.GenericIntent
 import by.vfedorenko.wishlist.presentation.Middleware
 import by.vfedorenko.wishlist.presentation.MviIntent
 import by.vfedorenko.wishlist.presentation.navigation.Forward
-import by.vfedorenko.wishlist.presentation.navigation.NavigationDirection
 import by.vfedorenko.wishlist.presentation.navigation.NavigationManager
+import by.vfedorenko.wishlist.presentation.navigation.NavigationRoute
 import by.vfedorenko.wishlist.presentation.screens.wishes.list.WishListIntent.OnAddClick
 import by.vfedorenko.wishlist.presentation.screens.wishes.list.WishListIntent.WishesReady
 import io.github.aakira.napier.Napier
@@ -24,7 +24,6 @@ class WishListMiddleware(
         outputIntents: MutableSharedFlow<MviIntent>,
         coroutineScope: CoroutineScope
     ) {
-        Napier.d("WishListMiddleware intent $intent")
         when(intent) {
             GenericIntent.Init -> coroutineScope.launch(outputIntents) {
                 repository.wishes.collect {
@@ -33,7 +32,7 @@ class WishListMiddleware(
                 }
             }
 
-            OnAddClick -> navigationManager.navigate(Forward(NavigationDirection.WishEditor()))
+            OnAddClick -> navigationManager.navigate(Forward(NavigationRoute.WishEditor()))
         }
     }
 }
