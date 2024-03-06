@@ -3,9 +3,11 @@ agp = "8.2.2"
 kotlin = "1.9.21"
 ksp = "1.9.21-1.0.16"
 skie = "0.6.1"
-coroutines = "1.8.0-RC2"
 datetime = "0.5.0"
 napier = "2.7.1"
+coroutines = "1.8.0-RC2"
+serialization = "1.6.3"
+ktor = "2.3.8"
 
 androidxNavigation = "2.7.6"
 compose = "1.5.4"
@@ -15,10 +17,15 @@ coil = "2.5.0"
 androidx-activityCompose = "1.8.0"
 hilt = "2.50"
 hiltNavigationCompose = "1.1.0"
-
+google-services = "4.4.1"
+play-services-auth = "20.7.0"
+firebase-auth = "22.3.1"
+google-signin = "1.1.0"
+settings = "1.1.1"
 
 [libraries]
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 
@@ -34,26 +41,57 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
+google-signin = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "google-signin" }
+settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 skie = { id = "co.touchlab.skie", version.ref = "skie" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 [bundles]
 commonImplementation = [
     "coroutines",
     "datetime",
     "napier",
-    #    "koin-annotations",
-#    "koin-core",
-#    "koin-compose"
+    "settings",
+    "ktor-client-core",
+    "ktor-client-content-negotiation",
+    "ktor-client-serialization-json",
+    "ktor-client-resources",
+    "ktor-client-auth",
+#    "ktor-client-serialization",
+    "ktor-client-logging",
+    "serialization-json",
 ]
-androidImplementation = [
+androidImplementations = [
+    "ktor-client-okhttp"
+]
+iOSImplementations = [
+    "ktor-client-darwin"
+]
+
+androidAppImplementation = [
+    "coroutines-android",
     "androidx-activity-compose",
     "androidx-navigation-compose",
 #    "androidx-appcompat",
@@ -63,4 +101,8 @@ androidImplementation = [
     "coil",
     "hilt-android",
     "hilt-navigation-compose",
+    "firebase-auth",
+    "play-services-auth",
+    "settings",
+#    "google-signin",
 ]

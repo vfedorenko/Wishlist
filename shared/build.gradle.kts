@@ -4,6 +4,7 @@ import co.touchlab.skie.configuration.SealedInterop
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.skie)
 }
@@ -34,6 +35,12 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        androidMain.dependencies {
+            implementation(libs.bundles.androidImplementations)
+        }
+        iosMain.dependencies {
+            implementation(libs.bundles.iosImplementations)
         }
     }
 }

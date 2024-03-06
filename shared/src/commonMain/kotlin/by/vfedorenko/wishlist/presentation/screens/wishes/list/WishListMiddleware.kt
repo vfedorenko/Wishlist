@@ -24,12 +24,15 @@ class WishListMiddleware(
         outputIntents: MutableSharedFlow<MviIntent>,
         coroutineScope: CoroutineScope
     ) {
-        when(intent) {
+        when (intent) {
             GenericIntent.Init -> coroutineScope.launch(outputIntents) {
-                repository.wishes.collect {
-                    Napier.d("WishesReady $it")
-                    outputIntents.tryEmit(WishesReady(it))
-                }
+                val wishes = repository.getWishes()
+                outputIntents.tryEmit(WishesReady(wishes))
+//
+//                repository.wishes.collect {
+//                    Napier.d("WishesReady $it")
+//
+//                }
             }
 
             OnAddClick -> navigationManager.navigate(Forward(NavigationRoute.WishEditor()))

@@ -1,6 +1,5 @@
 package by.vfedorenko.wishlist.android.presentation.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -15,7 +14,6 @@ import by.vfedorenko.wishlist.presentation.navigation.Screen
 import by.vfedorenko.wishlist.presentation.navigation.StringArg
 
 fun NavGraphBuilder.buildDestination(screen: Screen, body: @Composable (NavBackStackEntry) -> Unit) {
-    Log.d("11!!", "route = ${screen.buildRoute()}, arguments = ${screen.buildArguments()}")
     composable(
         route = screen.buildRoute(),
         arguments = screen.buildArguments()

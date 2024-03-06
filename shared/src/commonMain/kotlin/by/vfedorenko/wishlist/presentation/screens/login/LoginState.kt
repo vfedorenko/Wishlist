@@ -10,7 +10,6 @@ data class LoginState(
 ) : MviState
 
 // iOS compatibility, probs move to commonIos ?
-val defaultLoginState = LoginState()
 class LoginStore(
     initialState: LoginState,
     reducer: Reducer<LoginState>,

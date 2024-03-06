@@ -1,5 +1,6 @@
 package by.vfedorenko.wishlist.android.presentation.screens.login
 
+import by.vfedorenko.wishlist.data.repos.UserSessionRepository
 import by.vfedorenko.wishlist.presentation.Middleware
 import by.vfedorenko.wishlist.presentation.MviState
 import by.vfedorenko.wishlist.presentation.MviStore
@@ -19,21 +20,17 @@ object LoginModule {
 
     @Provides
     @ViewModelScoped
-    fun provideLoginMiddleware(
-        navigationManager: NavigationManager
-    ): Middleware<LoginState> = LoginMiddleware(
-        navigationManager
-    )
-
-    @Provides
-    @ViewModelScoped
     fun provideLoginStore(
-        middleware: Middleware<LoginState>,
-        commonMiddlewares: Set<@JvmSuppressWildcards Middleware<MviState>>
+        userSessionRepository: UserSessionRepository,
+        navigationManager: NavigationManager,
+        commonMiddlewares: Set<@JvmSuppressWildcards Middleware<MviState>>,
     ): MviStore<LoginState> = MviStore(
         initialState = LoginState(),
         reducer = LoginReducer(),
-        middleware = middleware,
+        middleware = LoginMiddleware(
+            userSessionRepository = userSessionRepository,
+            navigationManager = navigationManager
+        ),
         commonMiddlewares = commonMiddlewares
     )
 }

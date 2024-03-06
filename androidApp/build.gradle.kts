@@ -1,8 +1,11 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.googleServices)
 }
 
 android {
@@ -10,10 +13,35 @@ android {
     compileSdk = 34
     defaultConfig {
         applicationId = "by.vfedorenko.wishlist.android"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+    }
+    signingConfigs {
+        getByName("debug") {
+            var password = System.getenv("DEBUG_KEYSTORE_PASSWORD")
+            if (password.isNullOrBlank()) {
+                password = getLocalPropertyString("DEBUG_KEYSTORE_PASSWORD")
+            }
+
+            storeFile = file("debug_keystore")
+            keyAlias = "Android"
+            storePassword = password
+            keyPassword = password
+        }
+
+//        create("release") {
+//            var password = System.getenv("KEYSTORE_PASSWORD")
+//            if (password.isNullOrBlank()) {
+//                password = getLocalPropertyString("KEYSTORE_PASSWORD")
+//            }
+//
+//            storeFile = file("upload_keystore")
+//            keyAlias = "Android"
+//            storePassword = password
+//            keyPassword = password
+//        }
     }
     buildFeatures {
         compose = true
@@ -27,6 +55,12 @@ android {
         }
     }
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         getByName("release") {
             isMinifyEnabled = false
         }
@@ -42,9 +76,22 @@ android {
 
 dependencies {
     implementation(projects.shared)
+    implementation(libs.bundles.androidAppImplementation)
 
-    implementation(libs.bundles.androidImplementation)
     ksp(libs.hilt.compiler)
 
     debugImplementation(libs.compose.ui.tooling)
+}
+
+fun getLocalPropertyString(propertyName: String): String = try {
+    readProperties(
+        file("${rootProject.projectDir}/local.properties")
+    ).getProperty(propertyName) ?: ""
+} catch (e: Exception) {
+    println("Failed to open Local Properties")
+    ""
+}
+
+fun readProperties(propertiesFile: File) = Properties().apply {
+    propertiesFile.inputStream().use { load(it) }
 }

@@ -1,6 +1,5 @@
 package by.vfedorenko.wishlist.android.presentation.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,7 +23,6 @@ fun AppNavHost(
     ) {
         screens.map { screen ->
             buildDestination(screen) {
-                Log.d("11!!", "screen = $screen")
                 when (screen) {
                     Screen.Stub -> {
                         // skip stub
